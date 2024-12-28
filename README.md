@@ -11,3 +11,8 @@ Pressing and Releasing Space bar to shoot arrow
     ie Pressing holing the space bar for the Aim, and releasing the Space bar to Release/shoot the arrow
 
 F5 would return you to the main menu again
+
+
+The enemies can also shoot arrows and fireballs (collectively called as 'Projectiles')
+
+Shree Ram's arrow when collide with the projectiles of the enemies, they cancell/neutralize each other
