@@ -31,13 +31,24 @@ body {
     overflow: hidden;
 }
 
-canvas {
+/* canvas {
     border: 2px solid white;
     display: block;
     background-image: url('./assets/images/background.jpg');
     background-size: cover;
     background-repeat: no-repeat;
+} */
+
+/* Ensure the canvas takes the full viewport */
+canvas {
+    display: none; /* Initially hidden */
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
+
 
 /* Game Over Popup */
 /* #gameOverPopup {
@@ -99,6 +110,45 @@ canvas {
 
 #playAgainButton:hover {
     background-color: #0056b3;
+}
+
+
+/* Main Menu Styling */
+#mainMenu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width:100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: #121212;
+    background-image:url(/assets/images/menu-bg.jpg);
+    color: black;
+    text-align: center;
+}
+
+#mainMenu h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+#mainMenu button {
+    font-size: 20px;
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #ffcc00;
+    color: black;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+#mainMenu button:hover {
+    transform: scale(1.1);
+    background-color: #ff9900;
 }
 
 .hidden {
