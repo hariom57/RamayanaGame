@@ -9,3 +9,5 @@ Controls are extermely simple
 Up and Down arrow for the movement of Lord Rama up and down the screen
 Pressing and Releasing Space bar to shoot arrow
     ie Pressing holing the space bar for the Aim, and releasing the Space bar to Release/shoot the arrow
+
+F5 would return you to the main menu again
