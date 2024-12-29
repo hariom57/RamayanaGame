@@ -315,8 +315,26 @@ function restartGame() {
     update();
 }
 
+function backToMainMenu() {
+    score = 0;
+    isGameOver = true;
+    enemies = [];
+    arrows = [];
+    rama.y = 300;
+    rama.health=10;
+    enemyProjectiles = []; // Clear enemy projectiles
+    
+    // Hide the game over popup and start the update loop
+    document.getElementById('gameOverPopup').classList.add('hidden');
+   
+    mainMenu.style.display = 'block';
+
+    canvas.style.display = 'none';
+    update();
+}
 
 document.getElementById("playAgainButton").addEventListener("click", restartGame);
+document.getElementById("backToMainMenuButton").addEventListener("click", backToMainMenu);
 
 
 function update() {

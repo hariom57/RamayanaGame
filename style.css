@@ -97,7 +97,7 @@ canvas {
     color: #000;
 }
 
-#playAgainButton {
+#playAgainButton,#backToMainMenuButton {
     background-color: #007bff;
     color: white;
     border: none;
@@ -111,7 +111,9 @@ canvas {
 #playAgainButton:hover {
     background-color: #0056b3;
 }
-
+#backToMainMenuButton:hover {
+    background-color: #0056b3;
+}
 
 /* Main Menu Styling */
 #mainMenu {
