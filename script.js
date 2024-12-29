@@ -317,7 +317,7 @@ function restartGame() {
 
 function backToMainMenu() {
     score = 0;
-    isGameOver = true;
+    isGameOver = false;
     enemies = [];
     arrows = [];
     rama.y = 300;
