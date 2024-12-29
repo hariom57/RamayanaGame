@@ -317,7 +317,7 @@ function restartGame() {
 
 function backToMainMenu() {
     score = 0;
-    isGameOver = false;
+    isGameOver = true;
     enemies = [];
     arrows = [];
     rama.y = 300;
@@ -328,9 +328,9 @@ function backToMainMenu() {
     document.getElementById('gameOverPopup').classList.add('hidden');
    
     mainMenu.style.display = 'block';
-
+    document.getElementById("gameOverPopup").style.display = 'none';
     canvas.style.display = 'none';
-    update();
+    // update();
 }
 
 document.getElementById("playAgainButton").addEventListener("click", restartGame);
