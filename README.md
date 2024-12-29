@@ -16,3 +16,7 @@ F5 would return you to the main menu again
 The enemies can also shoot arrows and fireballs (collectively called as 'Projectiles')
 
 Shree Ram's arrow when collide with the projectiles of the enemies, they cancell/neutralize each other
+
+
+HealthBar is also added, Rama's health decreases by certain amount when a projectile hits him, but decreases to straight zero when an enemy hits him.(quite realistic?)
+So you might hit a projectile, but avoid enemy at all costs!!
