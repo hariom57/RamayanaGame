@@ -97,6 +97,9 @@ arrowEnemyImg.src = './assets/images/arrow_enemy1.png';
 const fireballImg = new Image();
 fireballImg.src = './assets/images/fire.png';
 
+const lighteningImg = new Image();
+lighteningImg.src = './assets/images/lightening.png';
+
 // Enemy projectiles array
 let enemyProjectiles = [];
 
@@ -180,9 +183,11 @@ function enemyShoot(enemy) {
         y: enemy.y + enemy.height / 2 - 5,
         width: 50,
         height: 50,
+        width: enemy.type === 1 ? 40 : (enemy.type === 2 ? 50 : (enemy.type === 3 ? 60 : 100)),
+        height: enemy.type === 1 ? 40 : (enemy.type === 2 ? 50 : (enemy.type === 3 ? 60 : 100)),
         speed: 5, // Speed of the projectile
         // type: Math.random() < 0.5 ? 'arrow' : 'fireball' // Randomly choose between arrow or fireball
-        type: enemy.type === 4 ? 'arrow' : 'fireball' // According to the type of enemy
+        type: enemy.type === 1 ? 'fireball' : (enemy.type === 2 ? 'fireball' : (enemy.type === 3 ? 'lightening' : 'arrow')), // According to the type of enemy
     };
     enemyProjectiles.push(projectile);
 }
@@ -191,7 +196,7 @@ function enemyShoot(enemy) {
 function drawEnemyProjectiles() {
     enemyProjectiles.forEach((projectile, index) => {
         // Choose the image based on projectile type
-        const projectileImg = projectile.type === 'arrow' ? arrowEnemyImg : fireballImg;
+        const projectileImg = projectile.type === 'arrow' ? arrowEnemyImg : (projectile.type === 'fireball' ? fireballImg: lighteningImg);
 
         // Draw the projectile
         ctx.drawImage(projectileImg, projectile.x, projectile.y-20, projectile.width, projectile.height);
@@ -211,19 +216,6 @@ function drawEnemyProjectiles() {
         }
     });
 }
-
-function shootEnemyProjectile(enemy) {
-    const projectile = {
-        x: enemy.x - 10,
-        y: enemy.y + enemy.height / 2 - 5,
-        width: enemyType === 1 ? 40 : (enemyType === 2 ? 50 : (enemyType === 3 ? 60 : 100)),
-        height: enemyType === 1 ? 40 : (enemyType === 2 ? 50 : (enemyType === 3 ? 60 : 100)),
-        speed: 6,
-        type: "arrow" // or "fireball"
-    };
-    enemyProjectiles.push(projectile);
-}
-
 
 // Modify the enemy spawning function to make them shoot
 function spawnEnemy() {
@@ -275,34 +267,20 @@ function restartGame() {
     enemies = [];
     arrows = [];
     rama.y = 300;
+    enemyProjectiles = []; // Clear enemy projectiles
     
     // Hide the game over popup and start the update loop
     document.getElementById('gameOverPopup').classList.add('hidden');
-    // update();
+    update();
 }
 
 
 document.getElementById("playAgainButton").addEventListener("click", restartGame);
 
 
-function resetGame() {
-    // isGameOver = false;
-    // score = 0;
-    // rama = { x: 50, y: canvas.height - 100, width: 50, height: 100, isAttacking: false }; // Reset Rama's position
-    // arrows = []; // Clear Rama's arrows
-    enemies = []; // Clear enemies
-    enemyProjectiles = []; // Clear enemy projectiles
-    // spawnEnemyTimer = 0; // Reset enemy spawn timer
-    // Any other variables to reset
-}
-
-
-
-// Update the game update function
 function update() {
     if (isGameOver) {
         showGameOverPopup(); // Only show the popup when the game is over
-        resetGame();
         return;
     }
     
@@ -342,5 +320,3 @@ function update() {
 
 setInterval(spawnEnemy, 2000);
 setInterval(update, 1000 / 60);
-
-
