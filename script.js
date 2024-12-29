@@ -59,7 +59,9 @@ let rama = {
     width: 75, 
     height: 75, 
     speed: 5, 
-    isAttacking: false 
+    isAttacking: false,
+    health: 10, // Health starts at 100% 
+    maxHealth: 10,
 };
 let enemies = [];
 let arrows = [];
@@ -126,10 +128,26 @@ function drawHalo(x, y, width, height) {
     ctx.restore();
 }
 
+function drawHealthBar(x, y, width, health, color,maxHealth) {
+    // const barWidth = width * (health/10); // Health bar proportional to health(health/10, because 10 is the max health kyuki)
+    const barWidth = width * (health/maxHealth);
+    const barHeight = 10; // Height of the health bar
+
+    // Draw the background (gray for remaining health space)
+    ctx.fillStyle = "gray";
+    ctx.fillRect(x, y - 10, width, barHeight);
+
+    // Draw the actual health (green or red depending on character)
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y - 10, barWidth, barHeight);
+}
+
+
 function drawRama() {
     drawHalo(rama.x, rama.y, rama.width, rama.height);
     const ramaImg = rama.isAttacking ? ramaAttackImg : ramaRelaxedImg;
     ctx.drawImage(ramaImg, rama.x, rama.y, rama.width, rama.height);
+    drawHealthBar(rama.x, rama.y, rama.width, rama.health, "green",rama.maxHealth);
 }
 
 function drawEnemies() {
@@ -137,9 +155,11 @@ function drawEnemies() {
         const enemyImgToDraw = enemy.type === 1 ? enemyImg : (enemy.type === 2 ? enemy2Img : (enemy.type === 3 ? enemy3Img : enemy4Img));
         ctx.drawImage(enemyImgToDraw, enemy.x, enemy.y, enemy.width, enemy.height);
         enemy.x -= enemy.speed;
+        
+        drawHealthBar(enemy.x, enemy.y, enemy.width, enemy.health, "red",enemy.maxHealth);
 
         if (enemy.x < -enemy.width) enemies.splice(index, 1);
-        if (checkCollision(rama, enemy)) isGameOver = true;
+        if (checkCollision(rama, enemy)) ramaTakesDamage(1);
     });
 }
 
@@ -211,7 +231,7 @@ function drawEnemyProjectiles() {
 
         // Check for collision with Rama
         if (checkCollision(projectile, rama)) {
-            isGameOver = true; // Trigger game over
+            ramaTakesDamage(1); // Trigger game over
             enemyProjectiles.splice(index, 1); // Remove the projectile
         }
     });
@@ -228,7 +248,8 @@ function spawnEnemy() {
         height: enemyType === 1 ? 40 : (enemyType === 2 ? 80 : (enemyType === 3 ? 150 : 250)),
         speed: enemyType === 1 ? 4 : (enemyType === 2 ? 3 : (enemyType === 3 ? 2 : 1)),
         type: enemyType,
-        health: enemyType === 1 ? 1 : (enemyType === 2 ? 2 : (enemyType === 3 ? 3 : 10))
+        health: enemyType === 1 ? 1 : (enemyType === 2 ? 2 : (enemyType === 3 ? 3 : 10)),
+        maxHealth: enemyType === 1 ? 1 : (enemyType === 2 ? 2 : (enemyType === 3 ? 3 : 10))
     };
     enemies.push(enemy);
 
@@ -244,6 +265,25 @@ function shootArrow() {
     const arrow = { x: rama.x + rama.width, y: rama.y + rama.height / 2 - 5, width: 20, height: 5, speed: 20 };
     arrows.push(arrow);
 }
+
+
+function ramaTakesDamage(damage) {
+    rama.health -= damage;
+    if (rama.health <= 0) {
+        rama.health = 0; // Ensure health does not go below 0
+        isGameOver = true; // Trigger game over when health reaches 0
+        showGameOverPopup();
+    }
+}
+
+function enemyTakesDamage(enemyIndex, damage) {
+    enemies[enemyIndex].health -= damage;
+    if (enemies[enemyIndex].health <= 0) {
+        enemies.splice(enemyIndex, 1); // Remove enemy if health is 0
+    }
+}
+
+
 
 function checkCollision(rect1, rect2) {
     return rect1.x < rect2.x + rect2.width &&
@@ -267,6 +307,7 @@ function restartGame() {
     enemies = [];
     arrows = [];
     rama.y = 300;
+    rama.health=10;
     enemyProjectiles = []; // Clear enemy projectiles
     
     // Hide the game over popup and start the update loop
