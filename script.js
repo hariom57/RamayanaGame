@@ -33,8 +33,12 @@ function initializeGame(level) {
             background = './assets/images/background1.jpg';
             break;
         case 3:
+            background = './assets/images/background3.jpg';
+            break;
+        case 4:
             background = './assets/images/background2.jpg';
             break;
+                
         default:
             background = './assets/images/background.jpg';
     }
