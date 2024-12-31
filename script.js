@@ -69,6 +69,7 @@ const arrowRamAudio = new Audio('./assets/audio/arrowRam.mp3');
 const arrowEnemyAudio = new Audio('./assets/audio/arrowEnemy.mp3');
 const cancelArrowAudio = new Audio('./assets/audio/cancelArrow.mp3');
 const enemyDiesAudio = new Audio('./assets/audio/enemyDies.mp3');
+const enemyDiesAudioRavan = new Audio('./assets/audio/enemyDies3.mp3');
 const enemyHurtAudio = new Audio('./assets/audio/enemyHurt.mp3');
 const gameOverPopupAudio = new Audio('./assets/audio/popup.mp3');
 const enemyAudio = [
@@ -116,6 +117,7 @@ function setGlobalVolume(volumeLevel) {
     arrowEnemyAudio.volume = volumeLevel;
     cancelArrowAudio.volume = volumeLevel;
     enemyDiesAudio.volume = volumeLevel;
+    enemyDiesAudioRavan.volume = volumeLevel;
     enemyHurtAudio.volume = volumeLevel;
     gameOverPopupAudio.volume = volumeLevel;
     enemyAudio.forEach(audio => audio.volume = volumeLevel);
@@ -333,10 +335,11 @@ function drawArrows() {
         enemies.forEach((enemy, enemyIndex) => {
             if (checkCollision(arrow, enemy)) {
                 enemy.health -= 1;
+                playAudioEffect(enemyHurtAudio);
                 if (enemy.health <= 0) {
                     enemies.splice(enemyIndex, 1);
                     score += enemy.type === 1 ? 10 : (enemy.type === 2 ? 20 : (enemy.type === 3 ? 30 : 50));
-                    playAudioEffect(enemyHurtAudio); // Play cancel sound
+                    enemy.type === 4 ? playAudioEffect(enemyDiesAudioRavan) : playAudioEffect(enemyDiesAudio);
                     
                     
                     // Pause the enemy audio
@@ -448,7 +451,6 @@ function ramaTakesDamage(damage) {
 function enemyTakesDamage(enemyIndex, damage) {
     enemies[enemyIndex].health -= damage;
     if (enemies[enemyIndex].health <= 0) {
-        playAudioEffect(enemyDiesAudio);
         // Pause all enemy audio
         enemyAudio.forEach(audio => {
             if (audio) {
@@ -457,6 +459,7 @@ function enemyTakesDamage(enemyIndex, damage) {
             }
         });
         enemies.splice(enemyIndex, 1); // Remove enemy if health is 0
+        playAudioEffect(enemyDiesAudio);
     }
     else playAudioEffect(enemyHurtAudio);
 }
