@@ -79,27 +79,56 @@ const enemyAudio = [
     new Audio('./assets/audio/enemy4.mp3')
 ];
 
-// Set volume for main menu audio
-mainMenuAudio.volume = 0.5; // 50% volume
 
-// Set volume for level audios
-levelAudio.forEach(audio => {
-    audio.volume = 0.2; // 70% volume
-});
 
-// Set volume for sound effects
-arrowRamAudio.volume = 0.8; // 80% volume
-arrowEnemyAudio.volume = 0.2;
-cancelArrowAudio.volume = 0.6;
-enemyDiesAudio.volume = 0.7;
-enemyHurtAudio.volume = 0.7;
-gameOverPopupAudio.volume = 1.0; // Full volume
+//VOLUME: METHOD 1 (manual set karna)
+// // Set volume for main menu audio
+// mainMenuAudio.volume = 0.5; // 50% volume
 
-// Set volume for enemy sounds
-enemyAudio.forEach(audio => {
-    audio.volume = 0.4; // 40% volume
-});
-enemyAudio[4].volume=1;
+// // Set volume for level audios
+// levelAudio.forEach(audio => {
+//     audio.volume = 0.2; // 70% volume
+// });
+
+// // Set volume for sound effects
+// arrowRamAudio.volume = 0.8; // 80% volume
+// arrowEnemyAudio.volume = 0.2;
+// cancelArrowAudio.volume = 0.6;
+// enemyDiesAudio.volume = 0.7;
+// enemyHurtAudio.volume = 0.7;
+// gameOverPopupAudio.volume = 1.0; // Full volume
+
+// // Set volume for enemy sounds
+// enemyAudio.forEach(audio => {
+//     audio.volume = 0.4; // 40% volume
+// });
+// enemyAudio[4].volume=1;
+
+
+// //METHOD 2: DYNAMICALLY SET KARNA
+function setGlobalVolume(volumeLevel) {
+    // Ensure the volume level is between 0.0 and 1.0
+    volumeLevel = Math.max(0, Math.min(volumeLevel, 1));
+
+    mainMenuAudio.volume = volumeLevel;
+    levelAudio.forEach(audio => audio.volume = volumeLevel);
+    arrowRamAudio.volume = volumeLevel;
+    arrowEnemyAudio.volume = volumeLevel;
+    cancelArrowAudio.volume = volumeLevel;
+    enemyDiesAudio.volume = volumeLevel;
+    enemyHurtAudio.volume = volumeLevel;
+    gameOverPopupAudio.volume = volumeLevel;
+    enemyAudio.forEach(audio => audio.volume = volumeLevel);
+}
+
+// Example usage
+// setGlobalVolume(0.5); // Set all audio to 50% volume
+
+
+
+
+
+
 
 // Function to play background audio for the main menu
 function playMainMenuAudio() {
@@ -337,7 +366,7 @@ function enemyShoot(enemy) {
         type: enemy.type === 1 ? 'fireball' : (enemy.type === 2 ? 'fireball' : (enemy.type === 3 ? 'lightening' : 'arrow')), // According to the type of enemy
     };
     enemyProjectiles.push(projectile);
-    playEnemyAudio(enemyType);// Play enemy projectile sound
+    playEnemyAudio(enemy.type);// Play enemy projectile sound
 }
 
 // Update and draw enemy projectiles

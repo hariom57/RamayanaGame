@@ -23,6 +23,14 @@
     <!-- <link rel="stylesheet" href="/mainmenu.css"> -->
 </head>
 <body>
+    <div id="Vol"><input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="0.5">
+        <script>
+            const volumeSlider = document.getElementById("volumeSlider");
+    
+            volumeSlider.addEventListener("input", () => {
+                setGlobalVolume(parseFloat(volumeSlider.value));
+            });
+        </script></div>
 
     <!-- Main Menu -->
     <div id="mainMenu">
@@ -35,7 +43,8 @@
     </div>
 
     <!-- Game Canvas -->
-    <canvas id="gameCanvas" class="hidden"></canvas>
+    <canvas id="gameCanvas" class="hidden">
+    </canvas>
 
     <!-- Game Over Popup -->
     <div id="gameOverPopup" class="hidden">
