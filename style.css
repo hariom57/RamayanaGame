@@ -126,7 +126,7 @@ canvas {
     background-size: cover;
     background-repeat: no-repeat;
     background-color: #121212;
-    background-image:url(/assets/images/menubg.jpg);
+    background-image:url(./assets/images/menubg.jpg);
     color: black;
     text-align: center;
 }
