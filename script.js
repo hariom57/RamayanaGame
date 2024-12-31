@@ -44,6 +44,9 @@ function initializeGame(level) {
         case 4:
             background = './assets/images/background2.jpg';
             break;
+        case 5:
+            background = './assets/images/background4.jpg';
+            break;
                 
         default:
             background = './assets/images/background.jpg';
@@ -61,7 +64,7 @@ function initializeGame(level) {
 
 // Audio objects
 const mainMenuAudio = new Audio('./assets/audio/background.mp3');
-const levelAudio = [new Audio('./assets/audio/level1.mp3'), new Audio('./assets/audio/level1.mp3'), new Audio('./assets/audio/level2.mp3'), new Audio('./assets/audio/level3.mp3')];
+const levelAudio = [new Audio('./assets/audio/level1.mp3'), new Audio('./assets/audio/level1.mp3'), new Audio('./assets/audio/level2.mp3'), new Audio('./assets/audio/level3.mp3'), new Audio('./assets/audio/level4.mp3')];
 const arrowRamAudio = new Audio('./assets/audio/arrowRam.mp3');
 const arrowEnemyAudio = new Audio('./assets/audio/arrowEnemy.mp3');
 const cancelArrowAudio = new Audio('./assets/audio/cancelArrow.mp3');
@@ -69,13 +72,34 @@ const enemyDiesAudio = new Audio('./assets/audio/enemyDies.mp3');
 const enemyHurtAudio = new Audio('./assets/audio/enemyHurt.mp3');
 const gameOverPopupAudio = new Audio('./assets/audio/popup.mp3');
 const enemyAudio = [
-    new Audio('./assets/audio/enemy.mp3'),
     new Audio('./assets/audio/enemy2.mp3'),
+    new Audio('./assets/audio/enemy.mp3'),
+    new Audio('./assets/audio/enemy1.mp3'),
     new Audio('./assets/audio/enemy3.mp3'),
     new Audio('./assets/audio/enemy4.mp3')
 ];
 
+// Set volume for main menu audio
+mainMenuAudio.volume = 0.5; // 50% volume
 
+// Set volume for level audios
+levelAudio.forEach(audio => {
+    audio.volume = 0.2; // 70% volume
+});
+
+// Set volume for sound effects
+arrowRamAudio.volume = 0.8; // 80% volume
+arrowEnemyAudio.volume = 0.2;
+cancelArrowAudio.volume = 0.6;
+enemyDiesAudio.volume = 0.7;
+enemyHurtAudio.volume = 0.7;
+gameOverPopupAudio.volume = 1.0; // Full volume
+
+// Set volume for enemy sounds
+enemyAudio.forEach(audio => {
+    audio.volume = 0.4; // 40% volume
+});
+enemyAudio[4].volume=1;
 
 // Function to play background audio for the main menu
 function playMainMenuAudio() {
@@ -119,6 +143,19 @@ function playAudioEffect(audio) {
         console.error("Error playing audio effect:", error);
     }
 }
+
+function playEnemyAudio(enemyType) {
+    // enemyAudio.forEach((audio, index) => {
+    //     if (audio) audio.pause();
+    //     if (index === enemyType && audio) {
+    //         audio.loop = true;
+    //         audio.play();
+    //     }
+    // });
+    enemyAudio[enemyType].loop = true;
+    enemyAudio[enemyType].play();
+}
+
 
 // Function to play background audio for the Popup when the game is over
 function playgameOverPopupAudio() {
@@ -235,8 +272,13 @@ function drawEnemies() {
 
         drawHealthBar(enemy.x, enemy.y, enemy.width, enemy.health, "red",enemy.maxHealth);
 
-        if (enemy.x < -enemy.width) enemies.splice(index, 1);
-        if (checkCollision(rama, enemy)) ramaTakesDamage(1);
+        if (enemy.x < -enemy.width){ 
+            enemies.splice(index, 1);
+            // Pause the enemy audio
+            enemyAudio[enemy.type].pause();
+            enemyAudio[enemy.type].currentTime = 0; // Reset audio playback position
+        }
+        if (checkCollision(rama, enemy)) ramaTakesDamage(1);    
     });
 }
 
@@ -266,6 +308,13 @@ function drawArrows() {
                     enemies.splice(enemyIndex, 1);
                     score += enemy.type === 1 ? 10 : (enemy.type === 2 ? 20 : (enemy.type === 3 ? 30 : 50));
                     playAudioEffect(enemyHurtAudio); // Play cancel sound
+                    
+                    
+                    // Pause the enemy audio
+                    enemyAudio[enemy.type].pause();
+                    enemyAudio[enemy.type].currentTime = 0; // Reset audio playback position
+
+                          
                 }
                 arrows.splice(arrowIndex, 1); // Remove the arrow after hitting an enemy
             }
@@ -288,7 +337,7 @@ function enemyShoot(enemy) {
         type: enemy.type === 1 ? 'fireball' : (enemy.type === 2 ? 'fireball' : (enemy.type === 3 ? 'lightening' : 'arrow')), // According to the type of enemy
     };
     enemyProjectiles.push(projectile);
-    playAudioEffect(arrowEnemyAudio); // Play enemy projectile sound
+    playEnemyAudio(enemyType);// Play enemy projectile sound
 }
 
 // Update and draw enemy projectiles
@@ -333,11 +382,12 @@ function spawnEnemy() {
     };
     enemies.push(enemy);
 
+    playEnemyAudio(enemyType);
+    
     // Make the enemy shoot periodically
     setInterval(() => {
         if (enemies.includes(enemy) && !isGameOver && gameState === "gameRunning") {
             enemyShoot(enemy);
-            playAudioEffect(enemyAudio); // Play laughing sound randomly when he shoots
             
             // enemyAudio.forEach((audio, index) => {
             //     if (audio) audio.pause();
@@ -370,8 +420,16 @@ function enemyTakesDamage(enemyIndex, damage) {
     enemies[enemyIndex].health -= damage;
     if (enemies[enemyIndex].health <= 0) {
         playAudioEffect(enemyDiesAudio);
+        // Pause all enemy audio
+        enemyAudio.forEach(audio => {
+            if (audio) {
+                audio.pause();
+                audio.currentTime = 0; // Reset audio playback position
+            }
+        });
         enemies.splice(enemyIndex, 1); // Remove enemy if health is 0
     }
+    else playAudioEffect(enemyHurtAudio);
 }
 
 
@@ -389,6 +447,15 @@ function showGameOverPopup() {
     highestScore = Math.max(highestScore, score);
     document.getElementById("highScoreDisplay").innerText = `Highest Score: ${highestScore}`;
     document.getElementById("gameOverPopup").classList.remove("hidden"); // Show popup
+    
+    
+    // Pause all enemy audio
+    enemyAudio.forEach(audio => {
+        if (audio) {
+            audio.pause();
+            audio.currentTime = 0; // Reset audio playback position
+        }
+    });
 }
 
 // Restart game logic
@@ -410,6 +477,14 @@ function restartGame() {
     });
     if (gameOverPopupAudio) gameOverPopupAudio.pause();
 
+    // Pause all enemy audio
+    enemyAudio.forEach(audio => {
+        if (audio) {
+            audio.pause();
+            audio.currentTime = 0; // Reset audio playback position
+        }
+    });
+    
     // mainMenuAudio.volume = 0.5;
     // levelAudio.forEach(audio => {
     //     if (audio) audio.volume = 0.5;
@@ -452,6 +527,14 @@ function backToMainMenu() {
     if (levelAudio[currentLevel]) levelAudio[currentLevel].pause();
     if (gameOverPopupAudio) gameOverPopupAudio.pause();
 
+    // Pause all enemy audio
+    enemyAudio.forEach(audio => {
+        if (audio) {
+            audio.pause();
+            audio.currentTime = 0; // Reset audio playback position
+        }
+    });
+
     // Play main menu audio on initial load
     playMainMenuAudio();
     
@@ -483,6 +566,13 @@ function update() {
         showGameOverPopup();
         playgameOverPopupAudio(gameOverPopupAudio);
         if (levelAudio[currentLevel]) levelAudio[currentLevel].pause();
+        // Pause all enemy audio
+        enemyAudio.forEach(audio => {
+            if (audio) {
+                audio.pause();
+                audio.currentTime = 0; // Reset audio playback position
+            }
+        });
         return;
     }
     
