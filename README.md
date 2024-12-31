@@ -20,3 +20,6 @@ Shree Ram's arrow when collide with the projectiles of the enemies, they cancell
 
 HealthBar is also added, Rama's health decreases by certain amount when a projectile hits him, but decreases to straight zero when an enemy hits him.(quite realistic?)
 So you might hit a projectile, but avoid enemy at all costs!!
+
+
+(Currently, this game is made only for PCs(Laptops, Desktops etc), not for mobile devices).
