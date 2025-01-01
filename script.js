@@ -47,6 +47,9 @@ function initializeGame(level) {
         case 5:
             background = './assets/images/background4.jpg';
             break;
+        case 6:
+            background = './assets/images/background5.gif';
+            break;
                 
         default:
             background = './assets/images/background.jpg';
@@ -73,11 +76,15 @@ const enemyDiesAudioRavan = new Audio('./assets/audio/enemyDies3.mp3');
 const enemyHurtAudio = new Audio('./assets/audio/enemyHurt.mp3');
 const gameOverPopupAudio = new Audio('./assets/audio/popup.mp3');
 const enemyAudio = [
-    new Audio('./assets/audio/enemy2.mp3'),
+    new Audio('./assets/audio/enemy.mp3'),
     new Audio('./assets/audio/enemy.mp3'),
     new Audio('./assets/audio/enemy1.mp3'),
     new Audio('./assets/audio/enemy3.mp3'),
-    new Audio('./assets/audio/enemy4.mp3')
+    new Audio('./assets/audio/enemy3.mp3'),
+    new Audio('./assets/audio/enemy3.mp3'),
+    new Audio('./assets/audio/enemy3.mp3'),
+    new Audio('./assets/audio/enemy4.mp3'),
+    new Audio('./assets/audio/enemy2.mp3')
 ];
 
 
@@ -225,6 +232,9 @@ ramaAttackImg.src = './assets/images/rama_attack.png';
 const enemyImg = new Image();
 enemyImg.src = './assets/images/enemy.png';
 
+const enemy1Img = new Image();
+enemy1Img.src = './assets/images/enemy1.png';
+
 const enemy2Img = new Image();
 enemy2Img.src = './assets/images/enemy2.png';
 
@@ -233,6 +243,12 @@ enemy3Img.src = './assets/images/enemy3.png';
 
 const enemy4Img = new Image();
 enemy4Img.src = './assets/images/enemy4.png';
+
+const enemy5Img = new Image();
+enemy5Img.src = './assets/images/enemy5.png';
+
+const enemy6Img = new Image();
+enemy6Img.src = './assets/images/enemy6.png';
 
 const arrowImg = new Image();
 arrowImg.src = './assets/images/arrow.png';
@@ -297,7 +313,7 @@ function drawRama() {
 
 function drawEnemies() {
     enemies.forEach((enemy, index) => {
-        const enemyImgToDraw = enemy.type === 1 ? enemyImg : (enemy.type === 2 ? enemy2Img : (enemy.type === 3 ? enemy3Img : enemy4Img));
+        const enemyImgToDraw = enemy.type === 1 ? enemyImg : (enemy.type === 2 ? enemy2Img : (enemy.type === 3 ? enemy3Img : (enemy.type === 4 ? enemy4Img : (enemy.type === 5 ? enemy1Img : (enemy.type === 6 ? enemy5Img : enemy6Img)))));
         ctx.drawImage(enemyImgToDraw, enemy.x, enemy.y, enemy.width, enemy.height);
         enemy.x -= enemy.speed;
 
@@ -401,7 +417,7 @@ function drawEnemyProjectiles() {
 function spawnEnemy() {
     if (gameState !== "gameRunning") return; // Only spawn enemies if the game is running
     const randomValue = Math.random();
-    let enemyType = randomValue < 0.3 ? 1 : (randomValue < 0.6 ? 2 : (randomValue < 0.9 ? 3 : 4));
+    let enemyType = randomValue < 0.2 ? 1 : (randomValue < 0.4 ? 2 : (randomValue < 0.6 ? 3 : (randomValue < 0.8 ? 4 : (randomValue < 0.9 ? 5 : 6))));
     const enemy = {
         x: canvas.width,
         y: Math.random() * (canvas.height - 50),
@@ -643,5 +659,5 @@ function update() {
 
 playMainMenuAudio();
 
-setInterval(spawnEnemy, 2000);
+setInterval(spawnEnemy, 3000);//difficulty: easy 3000, tough at 800
 setInterval(update, 1000 / 60);
