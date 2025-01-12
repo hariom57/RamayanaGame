@@ -221,6 +221,8 @@ let score = 0;
 let highestScore = 0;
 let isGameOver = false;
 let wasAttacking = false; // Tracks the previous attacking state
+let Difficulty=3000; //default
+
 
 // Load images
 const ramaRelaxedImg = new Image();
@@ -418,16 +420,44 @@ function spawnEnemy() {
     if (gameState !== "gameRunning") return; // Only spawn enemies if the game is running
     const randomValue = Math.random();
     let enemyType = randomValue < 0.2 ? 1 : (randomValue < 0.4 ? 2 : (randomValue < 0.6 ? 3 : (randomValue < 0.8 ? 4 : (randomValue < 0.9 ? 5 : 6))));
-    const enemy = {
-        x: canvas.width,
-        y: Math.random() * (canvas.height - 50),
-        width: enemyType === 1 ? 40 : (enemyType === 2 ? 80 : (enemyType === 3 ? 150 : 250)),
-        height: enemyType === 1 ? 40 : (enemyType === 2 ? 80 : (enemyType === 3 ? 150 : 250)),
-        speed: enemyType === 1 ? 4 : (enemyType === 2 ? 3 : (enemyType === 3 ? 2 : 1)),
-        type: enemyType,
-        health: enemyType === 1 ? 1 : (enemyType === 2 ? 2 : (enemyType === 3 ? 3 : 10)),
-        maxHealth: enemyType === 1 ? 1 : (enemyType === 2 ? 2 : (enemyType === 3 ? 3 : 10))
-    };
+
+    let enemy={};
+
+    if (Difficulty===3000) {
+         enemy = {
+            x: canvas.width,
+            y: Math.random() * (canvas.height - 50),
+            width: enemyType === 1 ? 40 : (enemyType === 2 ? 80 : (enemyType === 3 ? 150 : 250)),
+            height: enemyType === 1 ? 40 : (enemyType === 2 ? 80 : (enemyType === 3 ? 150 : 250)),
+            speed: enemyType === 1 ? 4 : (enemyType === 2 ? 3 : (enemyType === 3 ? 2 : (enemyType === 4 ? 1 : (enemyType === 5 ? 1 : 1)))),
+            type: enemyType,
+            health: enemyType === 1 ? 1 : (enemyType === 2 ? 2 : (enemyType === 3 ? 3 : 10)),
+            maxHealth: enemyType === 1 ? 1 : (enemyType === 2 ? 2 : (enemyType === 3 ? 3 : 10))
+        };
+        } else if(Difficulty===2000) {
+             enemy = {
+                x: canvas.width,
+                y: Math.random() * (canvas.height - 50),
+                width: enemyType === 1 ? 40 : (enemyType === 2 ? 80 : (enemyType === 3 ? 150 : 250)),
+                height: enemyType === 1 ? 40 : (enemyType === 2 ? 80 : (enemyType === 3 ? 150 : 250)),
+                speed: enemyType === 1 ? 5 : (enemyType === 2 ? 5 : (enemyType === 3 ? 5 : (enemyType === 4 ? 4 : (enemyType === 5 ? 3 : 2)))),
+                type: enemyType,
+                health: enemyType === 1 ? 1 : (enemyType === 2 ? 2 : (enemyType === 3 ? 3 : 10)),
+                maxHealth: enemyType === 1 ? 1 : (enemyType === 2 ? 2 : (enemyType === 3 ? 3 : 10))
+            };
+        }
+        else {
+             enemy = {
+                x: canvas.width,
+                y: Math.random() * (canvas.height - 50),
+                width: enemyType === 1 ? 40 : (enemyType === 2 ? 80 : (enemyType === 3 ? 150 : 250)),
+                height: enemyType === 1 ? 40 : (enemyType === 2 ? 80 : (enemyType === 3 ? 150 : 250)),
+                speed: enemyType === 1 ? 8 : (enemyType === 2 ? 7 : (enemyType === 3 ? 6 : (enemyType === 4 ? 5 : (enemyType === 5 ? 4 : 3)))),
+                type: enemyType,
+                health: enemyType === 1 ? 1 : (enemyType === 2 ? 2 : (enemyType === 3 ? 3 : 10)),
+                maxHealth: enemyType === 1 ? 1 : (enemyType === 2 ? 2 : (enemyType === 3 ? 3 : 10))
+            };
+        }
     enemies.push(enemy);
 
     playEnemyAudio(enemyType);
@@ -659,5 +689,19 @@ function update() {
 
 playMainMenuAudio();
 
-setInterval(spawnEnemy, 3000);//difficulty: easy 3000, tough at 800
+
+function easy(){
+    Difficulty=3000;
+    alert("Difficulty set to EASY")
+}
+function medium(){
+    Difficulty=2000;
+    alert("Difficulty set to MEDIUM")
+}
+function tough(){
+    Difficulty=800;
+    alert("Difficulty set to TOUGH")
+}
+
+setInterval(spawnEnemy, Difficulty);//difficulty: easy 3000, tough at 800
 setInterval(update, 1000 / 60);

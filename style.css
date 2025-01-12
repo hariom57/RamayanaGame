@@ -30,6 +30,33 @@ body {
     background-color: #000000;
     overflow: hidden;
     display: block;
+    /* font-family: fantasy; */
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    /* font-family: cursive; */
+    /* font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; */
+}
+
+.Headertop{
+    display: flex;
+}
+
+#Difficulty{
+    display: flex;
+    color: rgb(0, 0, 0);
+    background-color:#ffcc00;
+    padding-right: 10px;
+}
+
+#DifficultyDisplay {
+    color: rgb(0, 0, 0);
+    background-color:#ffcc00;
+}
+#easy{
+    background-color: green;
+}#medium{
+    background-color: rgb(1, 52, 254);
+}#tough{
+    background-color: rgb(255, 4, 4);
 }
 
 #Vol{
